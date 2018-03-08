@@ -1,10 +1,20 @@
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import App from './components/App';
+import AppRoutes from './routes';
+import { 
+    AUTHENTICATED
+} from './constants';
 
-ReactDOM.render(
+if (localStorage.getItem('user')){
+    console.log("yes");
+    store.dispatch({ type: AUTHENTICATED });
+}
+
+ReactDOM.render((
     <Provider store={store}>
-        <App />
+        <AppRoutes />
     </Provider>
-    , document.getElementById('root'));
+), document.getElementById('root'));

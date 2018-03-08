@@ -5,23 +5,35 @@ import { connect } from 'react-redux';
 import Home from './Home';
 import Login from './Login';
 import Signup from './Signup';
-//import { history } from '../store';
 import Header from './Header';
+import Inputpreview from './inputPreview';
+import { default as RequireAuth} from './Auth/require_auth';
+import {default as NotRequireAuth} from './Auth/no_require_auth';
 
+import { setMessage } from '../actions/message';
 
 class App extends Component {
+    _onChange = (value) => {
+        this.props.dispatch(setMessage(value))
+    }
 
     render() {
+        const { message } = this.props.messageReduc;
+
         return (
             <div>
-            <BrowserRouter>
-                <Switch>
-                    <Route exact path="/" component={Home}/>
-                    <Route path="/login" component={Login} />
-                    <Route path="/signup" component={Signup} />
-                </Switch>
-            </BrowserRouter>
-            
+                <Inputpreview 
+                    value={message}
+                    onChange={this._onChange}
+                     />
+
+                <BrowserRouter>
+                    <Switch>
+                        <Route exact path="/" component={RequireAuth(Home)}/>
+                        <Route path="/login" component={NotRequireAuth(Login)} />
+                        <Route path="/signup" component={NotRequireAuth(Signup)} />
+                    </Switch>
+                </BrowserRouter>
             </div>
         )
     }

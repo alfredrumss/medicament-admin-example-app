@@ -1,8 +1,59 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { signOutAction } from '../../actions/auth';
+
+const LoggedOutView = props => {
+
+    if (!props.currentUser){
+
+        return (
+            <div id="navbar" className="navbar-collapse collapse">
+                <ul className="nav navbar-nav"> 
+                </ul>
+                <ul className="nav navbar-nav navbar-right">
+                <li className="active"><Link to="/signup"> Sign up</Link></li>
+                <li> <Link to="/login"> Sign in</Link> </li>
+                </ul>
+            </div>
+        )
+    }
+    return null;
+}
+
+const LoggedInView = props => {
+
+    /*const handleClick = ev => {
+        props.onClickOut()
+    };*/
+
+    if (props.currentUser){
+        console.log("props>> ", props);
+        return (
+            <div id="navbar" className="navbar-collapse collapse">
+                <ul className="nav navbar-nav"> 
+                <li className="active"><a href="#">Specialities</a></li>
+                <li><a href="#">Diagnosis</a></li>
+                </ul>
+                <ul className="nav navbar-nav navbar-right">
+                <li><a onClick={ (ev) => { props.onClickOut() } } >Sign out</a></li>
+                </ul>
+            </div>
+        );
+    }
+    return null;
+}
 
 class Header extends React.Component {
+
+    loggedOut = () => {
+        this.props.signOutAction()
+    }
+
+
     render () {
+
+        console.log(this);
         return (
             <div className="container">
                 <nav className="navbar navbar-default">
@@ -15,31 +66,10 @@ class Header extends React.Component {
                         <span className="icon-bar"></span>
                         </button>
                         <a className="navbar-brand" href="#">MedicamentSelf</a>
+                        
                     </div>
-                    <div id="navbar" className="navbar-collapse collapse">
-                        <ul className="nav navbar-nav">
-                        <li className="active"><a href="#">Home</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Contact</a></li>
-                        <li className="dropdown">
-                            <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span className="caret"></span></a>
-                            <ul className="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
-                            <li role="separator" className="divider"></li>
-                            <li className="dropdown-header">Nav header</li>
-                            <li><a href="#">Separated link</a></li>
-                            <li><a href="#">One more separated link</a></li>
-                            </ul>
-                        </li>
-                        </ul>
-                        <ul className="nav navbar-nav navbar-right">
-                        <li className="active"><a href="./">Default <span className="sr-only">(current)</span></a></li>
-                        <li><a href="../navbar-static-top/">Static top</a></li>
-                        <li><a href="../navbar-fixed-top/">Fixed top</a></li>
-                        </ul>
-                    </div>
+                    <LoggedOutView currentUser={ this.props.is_authenticated } />
+                    <LoggedInView currentUser={ this.props.is_authenticated } onClickOut={ this.loggedOut } />
                     </div>
                 </nav>
 
@@ -56,4 +86,8 @@ class Header extends React.Component {
     }
 }
 
-export default Header;
+const mapStateToProps = (state) => ({
+    is_authenticated: state.auth.authenticated
+})
+
+export default connect(mapStateToProps, { signOutAction })(Header);
