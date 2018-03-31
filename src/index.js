@@ -9,7 +9,6 @@ import {
 } from './constants';
 
 if (localStorage.getItem('user')){
-    console.log("yes");
     store.dispatch({ type: AUTHENTICATED });
 }
 

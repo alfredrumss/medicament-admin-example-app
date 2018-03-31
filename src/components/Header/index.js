@@ -28,7 +28,6 @@ const LoggedInView = props => {
     };*/
 
     if (props.currentUser){
-        console.log("props>> ", props);
         return (
             <div id="navbar" className="navbar-collapse collapse">
                 <ul className="nav navbar-nav"> 
@@ -52,8 +51,6 @@ class Header extends React.Component {
 
 
     render () {
-
-        console.log(this);
         return (
             <div className="container">
                 <nav className="navbar navbar-default">
